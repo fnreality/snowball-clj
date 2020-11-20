@@ -17,6 +17,7 @@
           (apply func uses))))))
 
 ;;TEST
+
 (def c (staircase))
 
 (while
@@ -29,6 +30,7 @@
     [:sum] dec))
 
 (println @c)
+
 (assert (= @c {
                 :a 10 :b 42
                 :sum 52
