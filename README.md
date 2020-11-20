@@ -1,2 +1,2 @@
-# staircase-clj
+# snowball-clj
 A simple concurrency model embracing immutability, for Clojure. 
