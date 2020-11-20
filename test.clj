@@ -1,40 +1,39 @@
-(defn staircase
+(defn snowball
   []
   (agent {}))
 
 (defn base!
-  [sc base-key base-val]
-  (send sc
+  [sb base-key base-val]
+  (send sb
     #(assoc % base-key base-val)))
 
 (defn step!
-  [sc result needed-keys func]
+  [sb result needed-keys func]
   (let [
-        uses (map @sc needed-keys)]
+        uses (map @sb needed-keys)]
     (when (every? identity uses)
-      (send sc
+      (send sb
         #(assoc % result
           (apply func uses))))))
 
 ;;TEST
 
-(def sc (staircase))
+(def sb (snowball))
 
 (while
-    ((complement :result) @sc)
-  (base! sc :a 10)
-  (base! sc :b 42)
-  (step! sc :sum
+    ((complement :result) @sb)
+  (base! sb :a 10)
+  (base! sb :b 42)
+  (step! sb :sum
     [:a :b] +)
-  (step! sc :result
+  (step! sb :result
     [:sum] dec))
 
-(println @sc)
+(println @sb)
 
-(assert (= @sc {
+(assert (= @sb {
                 :a 10 :b 42
                 :sum 52
-                :result 51
-                }))
+                :result 51}))
 
 (shutdown-agents)
