@@ -3,9 +3,9 @@
   (agent {}))
 
 (defn base!
-  [sc b_key b_val]
+  [sc base-key base-val]
   (send sc
-    #(assoc % b_key b_val)))
+    #(assoc % base-key basw-val)))
 
 (defn step!
   [sc result needed-keys func]
