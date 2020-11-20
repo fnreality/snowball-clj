@@ -36,3 +36,5 @@
                 :sum 52
                 :result 51
                 }))
+
+(shutdown-agents)
