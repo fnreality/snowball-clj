@@ -11,8 +11,9 @@
   [sb result needed-keys func]
   (let [
         uses (map @sb needed-keys)]
-    (when (every? identity uses)
-      (send sb
-        #(assoc % result
-          (apply func uses))))))
+    (when-not (@sb result)
+      (when (every? identity uses)
+        (send sb
+          #(assoc % result
+            (apply func uses)))))))
 
