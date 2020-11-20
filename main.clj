@@ -1,18 +1,18 @@
-(defn staircase
+(defn snowball
   []
   (agent {}))
 
 (defn base!
-  [sc base-key base-val]
-  (send sc
-    #(assoc % base-key basw-val)))
+  [sb base-key base-val]
+  (send sb
+    #(assoc % base-key base-val)))
 
 (defn step!
-  [sc result needed-keys func]
+  [sb result needed-keys func]
   (let [
-        uses (map @sc needed-keys)]
+        uses (map @sb needed-keys)]
     (when (every? identity uses)
-      (send sc
+      (send sb
         #(assoc % result
           (apply func uses))))))
 
