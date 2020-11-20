@@ -3,9 +3,9 @@
   (agent {}))
 
 (defn base!
-  [sc b_key b_val]
+  [sc base-key base-val]
   (send sc
-    #(assoc % b_key b_val)))
+    #(assoc % base-key base-val)))
 
 (defn step!
   [sc result needed-keys func]
@@ -18,20 +18,20 @@
 
 ;;TEST
 
-(def c (staircase))
+(def sc (staircase))
 
 (while
-    ((complement :result) @c)
-  (base! c :a 10)
-  (base! c :b 42)
-  (step! c :sum
+    ((complement :result) @sc)
+  (base! sc :a 10)
+  (base! sc :b 42)
+  (step! sc :sum
     [:a :b] +)
-  (step! c :result
+  (step! sc :result
     [:sum] dec))
 
-(println @c)
+(println @sc)
 
-(assert (= @c {
+(assert (= @sc {
                 :a 10 :b 42
                 :sum 52
                 :result 51
