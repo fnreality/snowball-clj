@@ -9,9 +9,9 @@
 
 (defn step!
   [sb result needed-keys func]
-  (let [
-        uses (map @sb needed-keys)]
-    (when-not (@sb result)
+  (when-not (@sb result)
+    (let [
+          uses (map @sb needed-keys)]
       (when (every? identity uses)
         (send sb
           #(assoc % result
