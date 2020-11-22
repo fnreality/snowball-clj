@@ -20,14 +20,6 @@
   [target-key]
   (comp target-key :sent-keys meta deref))
 
-(defn base!
-  [sb base-key base-val]
-  (when-not-> sb (key-sent? base-key)
-    (send (fn->
-      (assoc base-key base-val)
-      (vary-meta update :sent-keys
-        #(conj % base-key))))))
-
 (defn step!
   [sb result needed-keys func]
   (let [
