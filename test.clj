@@ -11,10 +11,10 @@
   `(when-> ~basis (complement ~pred) ~@args))
 
 (defn snowball
-  []
-  (agent (with-meta {} {
-                        :snowball true
-                        :sent-keys #{}})))
+  [start]
+  (agent (with-meta start {
+                            :snowball true
+                            :sent-keys #{}})))
 
 (defn key-sent?
   [target-key]
@@ -41,12 +41,12 @@
 
 ;;TEST
 
-(def sb (snowball))
+(def sb (snowball {
+                    :a 10
+                    :b 42}))
 
 (while
     ((complement :result) @sb)
-  (base! sb :a 10)
-  (base! sb :b 42)
   (step! sb :sum
     [:a :b] +)
   (step! sb :result
@@ -55,8 +55,9 @@
 (println @sb)
 
 (assert (= @sb {
-                :a 10 :b 42
-                :sum 52
-                :result 51}))
+                 :a 10
+                 :b 42
+                 :sum 52
+                 :result 51}))
 
 (shutdown-agents)
