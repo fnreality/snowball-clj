@@ -1,27 +1,31 @@
+(defmacro fn->
+  [& args]
+  `(fn [x#] (-> x# ~@args)))
+
 (defn snowball
   []
-  (agent {} :meta {
-                    :snowball true
-                    :sent-keys #{}}))
+  (agent (with-meta {} {
+                        :snowball true
+                        :sent-keys #{}})))
 
 (defn base!
-  [var-quoted base-key base-val]
-  (send @var-quoted
-    #(assoc % base-key base-val)))
+  [sb base-key base-val]
+  (when-not ((comp base-key :sent-keys)
+      (meta @sb))
+    (send sb (fn->
+      (assoc base-key base-val)
+      (vary-meta update :sent-keys
+        #(conj % base-key))))))
 
 (defn step!
-  [var-quoted result needed-keys func]
-  (when
+  [sb result needed-keys func]
+  (when-not ((comp result :sent-keys)
+      (meta @sb))
     (let [
-          uses (map @@var-quoted needed-keys)]
-      (when (and
-        (every? identity uses)
-        (:snowball (meta var-quoted))
-        ((comp not result :sent-keys)
-          (meta var-quoted)))
-        (send @var-quoted
-          #(assoc % result
-            (apply func uses)))
-        (alter-meta! var-quoted :sent-keys
-          #(conj % result))))))
+          uses (map @sb needed-keys)]
+      (when (every? identity uses)
+        (send sb (fn->
+          (assoc result (apply func uses))
+          (vary-meta update :sent-keys
+            #(conj % result))))))))
 
