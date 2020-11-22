@@ -2,13 +2,9 @@
   [& args]
   `(fn [x#] (-> x# ~@args)))
 
-(defmacro when->
-  [basis pred & args]
-  `(when (~pred ~basis) (-> ~basis ~@args)))
-
 (defmacro when-not->
   [basis pred & args]
-  `(when-> ~basis (complement ~pred) ~@args))
+  `(when-not (~pred ~basis) (-> ~basis ~@args)))
 
 (defn snowball
   [start]
