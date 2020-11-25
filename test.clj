@@ -38,9 +38,9 @@
                     :b 42}))
 
 (while ((complement @sb) :result)
-  (try! sb :result [
-                     :sum <- + <- [:a :b]
-                     :result <- dec <- [:sum]]))
+  (try! sb [
+             :sum <- + <- [:a :b]
+             :result <- dec <- [:sum]]))
 
 (println @sb)
 
