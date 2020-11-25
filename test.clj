@@ -26,13 +26,10 @@
           (vary-meta update :sent-keys
             #(conj % result))))))))
 
-(defmacro form!
-  [sb result paths*]
-  (let [
-         steps* (map (fn [[target _ func _ needed-keys]]
-            `(step! ~sb ~target ~needed-keys ~func))
-          (partition 5 paths*))]
-    `(while ((complement (key-sent? ~result)) ~sb) ~@steps*)))
+(defmacro try!
+  [sb paths*]
+  `(do ~@(map (fn [[x _ f _ needed]] `(step! ~sb ~x ~needed ~f))
+    (partition 5 paths*))))
 
 ;;TEST
 
@@ -40,13 +37,10 @@
                     :a 10
                     :b 42}))
 
-(form! sb :result [
-                    :sum <- + <- [:a :b]
-                    :result <- dec <- [:sum]])
-
-(println "Formed, awaiting...")
-
-(while ((complement @sb) :result))
+(while ((complement @sb) :result)
+  (try! sb :result [
+                     :sum <- + <- [:a :b]
+                     :result <- dec <- [:sum]]))
 
 (println @sb)
 
