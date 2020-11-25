@@ -26,3 +26,11 @@ Try to output some data that the snowball has:
 (try! sb [
            :done? <- (returning true println) <- [:result]])
 ```
+
+NOTE: this last one requires `returning`:
+
+```clojure
+(defn returning
+  [x proc]
+  #(do (apply proc %&) x))
+```
