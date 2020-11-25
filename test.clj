@@ -21,7 +21,7 @@
         (alter-meta! sb update result
           #(conj % result))
         (send #(assoc % result
-          (apply func uses))))))))
+          (apply func uses))))))
 
 (defmacro try!
   [sb paths*]
