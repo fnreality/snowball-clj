@@ -47,6 +47,9 @@
              :result <- dec <- [:sum]
              :done? <- (returning true println) <- [:result]]))
 
+(println @sb)
+(println (meta @sb))
+
 (assert (= @sb {
                  :a 10
                  :b 42
