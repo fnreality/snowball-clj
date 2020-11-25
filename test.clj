@@ -1,7 +1,3 @@
-(defmacro fn->
-  [& args]
-  `(fn [x#] (-> x# ~@args)))
-
 (defmacro when-not->
   [basis pred & args]
   `(when-not (~pred ~basis) (-> ~basis ~@args)))
@@ -14,7 +10,7 @@
 
 (defn key-sent?
   [target-key]
-  (comp target-key :sent-keys meta deref))
+  (comp target-key :sent-keys meta))
 
 (defn step!
   [sb result needed-keys func]
@@ -22,10 +18,10 @@
         uses (map @sb needed-keys)]
     (when (every? identity uses)
       (when-not-> sb (key-sent? result)
-        (send (fn->
-          (vary-meta update :sent-keys
-            #(conj % result))
-          (assoc result (apply func uses))))))))
+        (alter-meta! sb update result
+          #(conj % result))
+        (send #(assoc % result
+          (apply func uses))))))))
 
 (defmacro try!
   [sb paths*]
@@ -47,9 +43,6 @@
              :sum <- + <- [:a :b]
              :result <- dec <- [:sum]
              :done? <- (returning true println) <- [:result]]))
-
-(println @sb)
-(println (meta @sb))
 
 (assert (= @sb {
                  :a 10
