@@ -22,15 +22,16 @@
         uses (map @sb needed-keys)]
     (when (every? identity uses)
       (when-not-> sb (key-sent? result)
-        (send (fn-> (assoc result (apply func uses))
+        (send (fn->
           (vary-meta update :sent-keys
-            #(conj % result))))))))
+            #(conj % result))
+          (assoc result (apply func uses))))))))
 
-(defmacro form!
-  [sb result paths*]
-  (let [
-         steps* (map (fn [[target _ func _ needed-keys]]
-            `(step! ~sb ~target ~needed-keys ~func))
-          (partition 5 paths*))]
-    `(while ((complement (key-sent? ~result)) ~sb) ~@steps*)))
+(defmacro try!
+  [sb paths*]
+  `(do ~@(map (fn [[x _ f _ needed]] `(step! ~sb ~x ~needed ~f))
+    (partition 5 paths*))))
 
+(defn returning
+  [x proc]
+  #(do (apply proc %&) x))
