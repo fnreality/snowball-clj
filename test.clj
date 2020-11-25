@@ -18,14 +18,15 @@
         uses (map @sb needed-keys)]
     (when (every? identity uses)
       (when-not-> sb (key-sent? result)
-        (alter-meta! sb update result
+        (alter-meta! update :sent-keys
           #(conj % result))
         (send #(assoc % result
           (apply func uses)))))))
 
 (defmacro try!
   [sb paths*]
-  `(do ~@(map (fn [[x _ f _ needed]] `(step! ~sb ~x ~needed ~f))
+  `(do ~@(map (fn [[x _ f _ needed]]
+    `(step! ~sb ~x ~needed ~f))
     (partition 5 paths*))))
 
 (defn returning
