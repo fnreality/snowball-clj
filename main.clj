@@ -1,4 +1,4 @@
-defmacro when-not->
+(defmacro when-not->
   [basis pred & args]
   `(when-not (~pred ~basis) (-> ~basis ~@args)))
 
@@ -27,8 +27,4 @@ defmacro when-not->
   `(do ~@(map (fn [[x _ f _ needed]]
     `(step! ~sb ~x ~needed ~f))
     (partition 5 paths*))))
-
-(defn returning
-  [x proc]
-  #(do (apply proc %&) x))
 
