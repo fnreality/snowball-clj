@@ -18,8 +18,7 @@
         uses (map @sb needed-keys)]
     (when (every? identity uses)
       (when-not-> sb (key-sent? result)
-        (send assoc result
-          (apply func uses))
+        (send assoc result (apply func uses))
         (alter-meta! update :sent-keys
           #(conj % result))))))
 
@@ -29,11 +28,11 @@
     `(step! ~sb ~x ~needed ~f))
     (partition 5 paths*))))
 
+;; TEST
+
 (defn returning
   [x proc]
   #(do (apply proc %&) x))
-
-;;TEST
 
 (def sb (snowball {
                     :a 10
