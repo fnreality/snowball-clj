@@ -9,6 +9,7 @@
 (defn snowball
   [start]
   (agent (with-meta start {
+                            :snowball true
                             :sent-keys #{}})))
 
 (defn key-sent?
