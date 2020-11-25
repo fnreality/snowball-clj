@@ -22,9 +22,10 @@
         uses (map @sb needed-keys)]
     (when (every? identity uses)
       (when-not-> sb (key-sent? result)
-        (vary-meta update :sent-keys
-          #(conj % result))
-        (send #(assoc % result (apply func uses)))))))
+        (send (fn->
+          (vary-meta update :sent-keys
+            #(conj % result))
+          #(assoc result (apply func uses))))))))
 
 (defmacro try!
   [sb paths*]
