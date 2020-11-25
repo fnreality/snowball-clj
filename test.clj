@@ -25,7 +25,7 @@
         (send (fn->
           (vary-meta update :sent-keys
             #(conj % result))
-          #(assoc result (apply func uses))))))))
+          (assoc result (apply func uses))))))))
 
 (defmacro try!
   [sb paths*]
