@@ -31,23 +31,27 @@
   `(do ~@(map (fn [[x _ f _ needed]] `(step! ~sb ~x ~needed ~f))
     (partition 5 paths*))))
 
+(defn returning
+  [x proc]
+  #(do (apply proc %&) x))
+
 ;;TEST
 
 (def sb (snowball {
                     :a 10
                     :b 42}))
 
-(while ((complement @sb) :result)
+(while ((complement :done?) @sb)
   (try! sb [
              :sum <- + <- [:a :b]
-             :result <- dec <- [:sum]]))
-
-(println @sb)
+             :result <- dec <- [:sum]
+             :done? <- (returning true println) <- [:result]]))
 
 (assert (= @sb {
                  :a 10
                  :b 42
                  :sum 52
-                 :result 51}))
+                 :result 51
+                 :done? true}))
 
 (shutdown-agents)
